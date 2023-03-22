@@ -1,7 +1,5 @@
 package jm.task.core.jdbc.util;
-import org.jboss.logging.Logger;
 import java.sql.Connection;
-import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 

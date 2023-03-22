@@ -2,12 +2,9 @@ package jm.task.core.jdbc.dao;
 
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import static jm.task.core.jdbc.util.Util.getConnection;
 
 public class UserDaoJDBCImpl implements UserDao {
     private Connection connection = Util.getConnection();
@@ -21,7 +18,7 @@ public class UserDaoJDBCImpl implements UserDao {
                 "name VARCHAR(45)," +
                 "lastName VARCHAR(45)," +
                 "age TINYINT(3))";
-        try (Statement statement = connection.createStatement()) {
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.executeUpdate(sql);
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -31,7 +28,7 @@ public class UserDaoJDBCImpl implements UserDao {
     public void dropUsersTable() {
         String sql = "DROP TABLE IF EXISTS users";
 
-        try (Statement statement = connection.createStatement()) {
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.executeUpdate(sql);
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -65,7 +62,7 @@ public class UserDaoJDBCImpl implements UserDao {
     public List<User> getAllUsers() {
         String sql = "SELECT * FROM users";
         List<User> list = new ArrayList<>();
-        try (Statement statement = connection.createStatement()) {
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
             ResultSet rs = statement.executeQuery(sql);
             while (rs.next()) {
                 User user = new User(rs.getString("name"), rs.getString("lastName"), rs.getByte("age"));
@@ -80,7 +77,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void cleanUsersTable() {
         String sql = "TRUNCATE users";
-        try (Statement statement = connection.createStatement()) {
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.executeUpdate(sql);
         } catch (SQLException e) {
             throw new RuntimeException(e);
